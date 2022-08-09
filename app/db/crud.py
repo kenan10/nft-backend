@@ -55,7 +55,7 @@ def create_access_list(db: Session, access_list: schemas.AccessListCreate):
 
 
 def get_access_list_by_name_and_collection_name(db: Session, name: str,
-                                              collection_id: int):
+                                                collection_id: int):
     access_list = db.query(models.AccessList).filter(
         models.AccessList.collection_id == collection_id,
         models.AccessList.name == name).first()
@@ -70,9 +70,11 @@ def create_access_list_item(db: Session,
     return db_access_list_item
 
 
-def get_access_list_item(db: Session, address: str, list_id: int):
+def get_access_list_item(db: Session, address: str, 
+                         list_name: str, collection_name: str):
     access_list_item = db.query(models.AccessListItem).filter(
-        models.AccessListItem.list_id == list_id,
-        models.AccessListItem.wallet.has(address=address) 
+        models.AccessListItem.list.has(name=list_name),
+        models.AccessListItem.list.has(collection=collection_name),
+        models.AccessListItem.wallet.has(address=address)
     ).first()
     return access_list_item

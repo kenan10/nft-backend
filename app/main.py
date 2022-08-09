@@ -1,11 +1,10 @@
 from fastapi import Depends, FastAPI
-from .routers import lists, wallets
+from .routers import list_items
 
 app = FastAPI()
 
 
-app.include_router(lists.router)
-app.include_router(wallets.router)
+app.include_router(list_items.router)
 
 
 @app.get("/")

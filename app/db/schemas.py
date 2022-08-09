@@ -83,12 +83,16 @@ AccessListItem
 
 
 class AccessListItemBase(BaseModel):
-    wallet: WalletCreate
+    wallet: Wallet
     list_id: int
     signed_address: str
 
 
-class AccessListItem(AccessListItemBase):
+class AccessListItem(BaseModel):
+    wallet_address: str
+    list_name: str
+    collection_name: str
+    signed_address: str
     class Config:
         orm_mode = True
 
