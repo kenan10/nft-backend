@@ -15,7 +15,7 @@ class Base:
 class Collection(Base):
     __tablename__ = "collection"
 
-    name = Column(String(255), nullable=False)
+    name = Column(String(255), nullable=False, unique=True)
     tokens = relationship("Token", backref="collection")
     lists = relationship("AccessList", backref="collection")
 
@@ -24,8 +24,8 @@ class Wallet(Base):
     __tablename__ = "wallet"
 
     address = Column(String(255), unique=True, nullable=False)
-    tokens = relationship("Token", backref="owner")
-    list_items = relationship("AccessListItem", backref="wallet")
+    tokens = relationship("Token", back_populates="owner")
+    list_items = relationship("AccessListItem", back_populates="wallet")
 
 
 class Token(Base):
@@ -33,6 +33,8 @@ class Token(Base):
 
     nft_id = Column(BigInteger, nullable=False)
     wallet_id = Column(BigInteger, ForeignKey("wallet.id"))
+    owner = relationship("Wallet", back_populates="tokens",
+                         uselist=False)
     collection_id = Column(BigInteger, ForeignKey("collection.id"))
     details = relationship("TokenDetail", backref="token")
 
@@ -44,7 +46,8 @@ class TokenDetailType(Base):
     __tablename__ = "token_detail_type"
 
     name = Column(String(255), unique=True, nullable=False)
-    token_details = relationship("TokenDetail", backref="token_detail_type")
+    token_details = relationship(
+        "TokenDetail", back_populates="token_detail_type")
 
 
 class TokenDetail(Base):
@@ -54,6 +57,9 @@ class TokenDetail(Base):
     token_id = Column(BigInteger, ForeignKey("token.id"))
     token_detail_type_id = Column(
         BigInteger, ForeignKey("token_detail_type.id"))
+    token_detail_type = relationship(
+        "TokenDetailType", back_populates="token_details",
+        uselist=False)
 
     __table_args__ = (UniqueConstraint(
         "token_id", "token_detail_type_id", name="unique_detail"),)
@@ -63,7 +69,7 @@ class AccessListType(Base):
     __tablename__ = "list_type"
 
     name = Column(String(255), nullable=False)
-    lists = relationship("AccessList", backref="list_type")
+    lists = relationship("AccessList", back_populates="list_type")
 
 
 class AccessList(Base):
@@ -73,14 +79,23 @@ class AccessList(Base):
     list_type_id = Column(BigInteger, ForeignKey("list_type.id"))
     collection_id = Column(BigInteger, ForeignKey("collection.id"))
     signing_pk = Column(String(255), nullable=False)
-    list_items = relationship("AccessListItem", backref="list")
+    list_type = relationship("AccessListType", back_populates="lists",
+                             uselist=False)
+    list_items = relationship("AccessListItem", back_populates="list")
+
+    __table_args__ = (UniqueConstraint(
+        "name", "collection_id", name="unique_access_list"),)
 
 
 class AccessListItem(Base):
     __tablename__ = "list_item"
 
     wallet_id = Column(BigInteger, ForeignKey("wallet.id"))
+    wallet = relationship("Wallet", back_populates="list_items",
+                          uselist=False)
     list_id = Column(BigInteger, ForeignKey("list.id"))
+    list = relationship("AccessList", back_populates="list_items",
+                        uselist=False)
     signed_address = Column(String(255), nullable=False)
 
     __table_args__ = (UniqueConstraint(
