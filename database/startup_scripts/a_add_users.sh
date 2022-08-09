@@ -1,0 +1,6 @@
+mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER backend_user@'%' IDENTIFIED WITH caching_sha2_password BY '$BACKEND_PASSWORD';"
+mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON nft.* TO backend_user;"
+mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON test_nft.* TO backend_user;"
+mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER list_creator@'%' IDENTIFIED WITH caching_sha2_password BY '$LIST_CREATOR_PSW';"
+mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON nft.* TO list_creator;"
+mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON test_nft.* TO list_creator;"
