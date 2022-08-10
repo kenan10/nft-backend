@@ -9,3 +9,18 @@ services:
       - ./database/startup_scripts:/docker-entrypoint-initdb.d
     ports:
       - 3306:3306
+  fast_api:
+    depends_on:
+      - "db"
+    container_name: fast_api
+    build:
+      context: .
+      dockerfile: /app/Dockerfile
+    restart: always
+    env_file: .env
+    ports:
+      - 80:80
+networks:
+  default:
+    
+  

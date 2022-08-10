@@ -30,6 +30,7 @@ target_metadata = Base.metadata
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
+
 config.set_section_option("alembic", "DB_PASS", os.getenv('MYSQL_ROOT_PASSWORD'))
 config.set_section_option("alembic", "DB_NAME", os.getenv('MYSQL_DATABASE'))
 

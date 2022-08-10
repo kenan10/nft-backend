@@ -68,14 +68,14 @@ class AccessListBase(BaseModel):
 class AccessList(AccessListBase):
     signing_pk: str
     members: list[Wallet]
-    
+
     class Config:
         orm_mode = True
 
 
 class AccessListCreate(AccessListBase):
     signing_pk: str | None
-    
+
 
 """
 AccessListItem
@@ -83,7 +83,7 @@ AccessListItem
 
 
 class AccessListItemBase(BaseModel):
-    wallet: Wallet
+    wallet_id: int
     list_id: int
     signed_address: str
 
@@ -93,6 +93,7 @@ class AccessListItem(BaseModel):
     list_name: str
     collection_name: str
     signed_address: str
+
     class Config:
         orm_mode = True
 
