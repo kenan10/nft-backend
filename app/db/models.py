@@ -17,7 +17,7 @@ class Collection(Base):
 
     name = Column(String(255), nullable=False, unique=True)
     tokens = relationship("Token", backref="collection")
-    lists = relationship("AccessList", backref="collection")
+    lists = relationship("AccessList", back_populates="collection")
 
 
 class Wallet(Base):
@@ -32,10 +32,11 @@ class Token(Base):
     __tablename__ = "token"
 
     nft_id = Column(BigInteger, nullable=False)
-    wallet_id = Column(BigInteger, ForeignKey("wallet.id"))
+    wallet_id = Column(BigInteger, ForeignKey("wallet.id"), nullable=False)
     owner = relationship("Wallet", back_populates="tokens",
                          uselist=False)
-    collection_id = Column(BigInteger, ForeignKey("collection.id"))
+    collection_id = Column(BigInteger, ForeignKey(
+        "collection.id"), nullable=False)
     details = relationship("TokenDetail", backref="token")
 
     __table_args__ = (UniqueConstraint(
@@ -54,9 +55,9 @@ class TokenDetail(Base):
     __tablename__ = "token_detail"
 
     value = Column(String(255), nullable=False)
-    token_id = Column(BigInteger, ForeignKey("token.id"))
+    token_id = Column(BigInteger, ForeignKey("token.id"), nullable=False)
     token_detail_type_id = Column(
-        BigInteger, ForeignKey("token_detail_type.id"))
+        BigInteger, ForeignKey("token_detail_type.id"), nullable=False)
     token_detail_type = relationship(
         "TokenDetailType", back_populates="token_details",
         uselist=False)
@@ -76,12 +77,16 @@ class AccessList(Base):
     __tablename__ = "list"
 
     name = Column(String(255), nullable=False)
-    list_type_id = Column(BigInteger, ForeignKey("list_type.id"))
-    collection_id = Column(BigInteger, ForeignKey("collection.id"))
+    list_type_id = Column(BigInteger, ForeignKey(
+        "list_type.id"), nullable=False)
+    collection_id = Column(BigInteger, ForeignKey(
+        "collection.id"), nullable=False)
     signing_pk = Column(String(255), nullable=False)
     list_type = relationship("AccessListType", back_populates="lists",
                              uselist=False)
     list_items = relationship("AccessListItem", back_populates="list")
+    collection = relationship("Collection", back_populates="lists",
+                              uselist=False)
 
     __table_args__ = (UniqueConstraint(
         "name", "collection_id", name="unique_access_list"),)
@@ -90,10 +95,10 @@ class AccessList(Base):
 class AccessListItem(Base):
     __tablename__ = "list_item"
 
-    wallet_id = Column(BigInteger, ForeignKey("wallet.id"))
+    wallet_id = Column(BigInteger, ForeignKey("wallet.id"), nullable=False)
     wallet = relationship("Wallet", back_populates="list_items",
                           uselist=False)
-    list_id = Column(BigInteger, ForeignKey("list.id"))
+    list_id = Column(BigInteger, ForeignKey("list.id"), nullable=False)
     list = relationship("AccessList", back_populates="list_items",
                         uselist=False)
     signed_address = Column(String(255), nullable=False)

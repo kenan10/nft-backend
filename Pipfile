@@ -9,6 +9,8 @@ fastapi = "*"
 sqlalchemy = "*"
 mysql-connector-python = "*"
 alembic = "*"
+coincurve = "*"
+web3 = "*"
 
 [dev-packages]
 autopep8 = "*"

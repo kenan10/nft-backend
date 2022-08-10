@@ -1,0 +1,4 @@
+wallet_address,date,ip address hash,twitter username,twitter id,twitter follower count,twitter account created,discord username,discord id,eth balance at registration,collab,winner,waitlist,disqualified,custom field
+0x87edE566125DBd8A4fc0E844ba251B80EB3DBD8b,2022-08-03 15:02:29.255938+00:00,None,,,,,,,,,True,False,False,
+0x5eE88F2A2dD4bCcC8A08Cc14dcE2787818911628,2022-08-03 15:03:02.484837+00:00,None,,,,,,,,,False,True,False,
+0xd46146664B0625c9c95c5F5450a2A64519793581,2022-08-03 15:03:20.901924+00:00,None,,,,,,,,,False,False,False,

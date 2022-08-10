@@ -61,7 +61,7 @@ Access list
 
 class AccessListBase(BaseModel):
     name: str
-    collection_id: Collection
+    collection_id: int
     list_type_id: int
 
 

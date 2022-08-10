@@ -48,16 +48,16 @@ def get_access_list_type_by_name(db: Session, name: str):
 
 
 def create_access_list(db: Session, access_list: schemas.AccessListCreate):
-    db_access_list = models.AccessListType(**access_list.dict())
+    db_access_list = models.AccessList(**access_list.dict())
     db.add(db_access_list)
     db.commit()
     return db_access_list
 
 
 def get_access_list_by_name_and_collection_name(db: Session, name: str,
-                                                collection_id: int):
+                                                collection_name: str):
     access_list = db.query(models.AccessList).filter(
-        models.AccessList.collection_id == collection_id,
+        models.AccessList.collection.has(name=collection_name),
         models.AccessList.name == name).first()
     return access_list
 
@@ -70,8 +70,8 @@ def create_access_list_item(db: Session,
     return db_access_list_item
 
 
-def get_access_list_item(db: Session, address: str, 
-                         list_name: str, collection_name: str):
+def get_access_list_item(db: Session, address: str,list_name: str,
+                         collection_name: str) -> models.AccessListItem | None:
     access_list_item = db.query(models.AccessListItem).filter(
         models.AccessListItem.list.has(name=list_name),
         models.AccessListItem.list.has(collection=collection_name),
