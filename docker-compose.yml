@@ -7,9 +7,12 @@ services:
     volumes:
       - ./database/mysql_data:/var/lib/mysql
       - ./database/startup_scripts:/docker-entrypoint-initdb.d
+    expose:
+      - 3306
     ports:
       - 3306:3306
   fast_api:
+    command: uvicorn app.main:app --host 0.0.0.0 --port 80
     depends_on:
       - "db"
     container_name: fast_api
@@ -20,7 +23,3 @@ services:
     env_file: .env
     ports:
       - 80:80
-networks:
-  default:
-    
-  
