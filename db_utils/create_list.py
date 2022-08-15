@@ -1,8 +1,8 @@
 from dotenv import load_dotenv
 import csv
 import argparse
-from ..db import models, schemas, crud
-from ..dependencies import get_db
+from .db import models, schemas, crud
+from .db.database import get_db
 from .key_pair import KeyPair
 
 
@@ -32,6 +32,15 @@ parser = argparse.ArgumentParser(
     prog="List creator",
     description="""You can use this small utility to add allowlist addresses
                                  and addresses digests to database. Input *.csv file.""",
+)
+parser.add_argument(
+    "-db",
+    "--db_url",
+    help="""Database url. Example: dialect+driver://username:password@host:port/database;
+    mysql+mysqlconnector://username:password@host:3306/database_name""",
+    required=True,
+    action="store",
+    dest="db_url",
 )
 parser.add_argument(
     "-lf",
@@ -89,7 +98,7 @@ args = parser.parse_args()
 
 column_names, rows = parse_file(args.path_to_file)
 keypair = KeyPair()
-db = next(get_db())
+db = next(get_db(args.db_url))
 
 
 print("Resolving collection... ", end="")
@@ -149,5 +158,5 @@ for row in rows:
                 ),
             )
         print(db_access_list_item)
-        
+
 keypair.save_pem(args.pem_key_path)
