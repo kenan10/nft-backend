@@ -9,13 +9,13 @@ router = APIRouter(prefix="/lists", tags=["lists"])
 
 
 @router.get(
-    "/list_items",
+    "/list_items_by_list_name_and_address",
     response_model=schemas.AccessListItem,
 )
-async def read_list_item_if_exist(
+async def read_list_item_from_list_if_exist(
     address: str, list_name: str, collection_name: str, db: Session = Depends(get_db)
 ):
-    db_list_item = crud.get_access_list_item_by_list_name_collection_name(
+    db_list_item = crud.get_access_list_item_by_list_name_collection_name_and_address(
         db, address=address, list_name=list_name, collection_name=collection_name
     )
     try:
@@ -30,6 +30,42 @@ async def read_list_item_if_exist(
             )
             return list_item
         else:
-            raise HTTPException(status_code=400, detail="address not found in specified list")
+            raise HTTPException(
+                status_code=400, detail="address not found in specified list"
+            )
+    except ValidationError as e:
+        return e
+
+
+@router.get(
+    "/list_items_by_address",
+    response_model=schemas.AccessListItems,
+)
+async def read_list_items_from_list_if_exist(
+    address: str, collection_name: str, db: Session = Depends(get_db)
+):
+    db_list_items = crud.get_access_list_items_by_collection_name_and_address(
+        db, address=address, collection_name=collection_name
+    )
+    try:
+        if db_list_items:
+            data = []
+            for item in db_list_items:
+                data.append(
+                    schemas.AccessListItem.parse_obj(
+                        {
+                            "wallet_address": item.wallet.address,
+                            "list_name": item.list.name,
+                            "collection_name": item.list.collection.name,
+                            "signed_address": item.signed_address,
+                        }
+                    )
+                )
+            list_items = schemas.AccessListItems.parse_obj(data)
+            return list_items
+        else:
+            raise HTTPException(
+                status_code=400, detail="address not found in specified list"
+            )
     except ValidationError as e:
         return e

@@ -121,5 +121,4 @@ def get_access_list_item_by_list_name_collection_name(
         )
         .first()
     )
-    print(access_list_item)
     return access_list_item

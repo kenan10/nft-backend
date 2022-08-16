@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import List
 
 """
 Collection
@@ -67,7 +68,7 @@ class AccessListBase(BaseModel):
 
 class AccessList(AccessListBase):
     signing_pk: str
-    members: list[Wallet]
+    members: List[Wallet]
 
     class Config:
         orm_mode = True
@@ -96,6 +97,20 @@ class AccessListItem(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class AccessListItem(BaseModel):
+    wallet_address: str
+    list_name: str
+    collection_name: str
+    signed_address: str
+
+    class Config:
+        orm_mode = True
+
+
+class AccessListItems(BaseModel):
+    __root__: List[AccessListItem]
 
 
 class AccessListItemCreate(AccessListItemBase):

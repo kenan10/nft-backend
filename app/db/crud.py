@@ -94,7 +94,7 @@ def get_access_list_item(
     return access_list_item
 
 
-def get_access_list_item_by_list_name_collection_name(
+def get_access_list_item_by_list_name_collection_name_and_address(
     db: Session, address: str, list_name: str, collection_name: str
 ):
     wallet = (
@@ -121,5 +121,33 @@ def get_access_list_item_by_list_name_collection_name(
         )
         .first()
     )
-    print(access_list_item)
+    return access_list_item
+
+
+def get_access_list_items_by_collection_name_and_address(
+    db: Session, address: str, collection_name: str
+):
+    wallet = (
+        db.query(models.Wallet.id).filter(models.Wallet.address == address).subquery()
+    )
+    collection = (
+        db.query(models.Collection.id)
+        .filter(models.Collection.name == collection_name)
+        .subquery()
+    )
+    access_list = (
+        db.query(models.AccessList.id)
+        .filter(
+            models.AccessList.collection_id.in_(collection),
+        )
+        .subquery()
+    )
+    access_list_item = (
+        db.query(models.AccessListItem)
+        .filter(
+            models.AccessListItem.wallet_id.in_(wallet),
+            models.AccessListItem.list_id.in_(access_list),
+        )
+        .all()
+    )
     return access_list_item
