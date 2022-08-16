@@ -30,6 +30,6 @@ async def read_list_item_if_exist(
             )
             return list_item
         else:
-            raise HTTPException(status_code=404, detail="address not found in specified list")
+            raise HTTPException(status_code=400, detail="address not found in specified list")
     except ValidationError as e:
         return e
