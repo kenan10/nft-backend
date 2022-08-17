@@ -9,7 +9,7 @@ router = APIRouter(prefix="/lists", tags=["lists"])
 
 
 @router.get(
-    "/list_items_by_list_name_and_address",
+    "/list_item",
     response_model=schemas.AccessListItem,
 )
 async def read_list_item_from_list_if_exist(
@@ -38,7 +38,7 @@ async def read_list_item_from_list_if_exist(
 
 
 @router.get(
-    "/list_items_by_address",
+    "/list_items",
     response_model=schemas.AccessListItems,
 )
 async def read_list_items_from_list_if_exist(
