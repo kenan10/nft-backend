@@ -1,6 +1,16 @@
 from pydantic import BaseModel
 from typing import List
 
+def to_camel(string):
+    temp = string.split('_')
+    res = temp[0] + ''.join(ele.title() for ele in temp[1:])
+    return res
+
+class CamelModel(BaseModel):
+    class Config:
+        alias_generator = to_camel
+        allow_population_by_field_name = True
+
 """
 Collection
 """
@@ -99,7 +109,7 @@ class AccessListItem(BaseModel):
         orm_mode = True
 
 
-class AccessListItem(BaseModel):
+class AccessListItem(CamelModel):
     wallet_address: str
     list_name: str
     collection_name: str
