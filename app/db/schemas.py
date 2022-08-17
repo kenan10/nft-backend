@@ -110,7 +110,7 @@ class AccessListItem(BaseModel):
 
 
 class AccessListItems(BaseModel):
-    __root__: List[AccessListItem]
+    __root__: List[AccessListItem] = []
 
 
 class AccessListItemCreate(AccessListItemBase):

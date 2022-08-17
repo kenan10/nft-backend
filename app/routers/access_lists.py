@@ -47,8 +47,8 @@ async def read_list_items_from_list_if_exist(
     db_list_items = crud.get_access_list_items_by_collection_name_and_address(
         db, address=address, collection_name=collection_name
     )
-    try:
-        if db_list_items:
+    if db_list_items:
+        try:
             data = []
             for item in db_list_items:
                 data.append(
@@ -63,9 +63,7 @@ async def read_list_items_from_list_if_exist(
                 )
             list_items = schemas.AccessListItems.parse_obj(data)
             return list_items
-        else:
-            raise HTTPException(
-                status_code=400, detail="address not found in specified list"
-            )
-    except ValidationError as e:
-        return e
+        except ValidationError as e:
+            return e
+    else:
+        return schemas.AccessListItems()
