@@ -9,9 +9,6 @@ fastapi = "*"
 sqlalchemy = "*"
 mysql-connector-python = "*"
 alembic = "*"
-web3 = "*"
-eth-keys = "*"
-coincurve = "*"
 
 [dev-packages]
 black = "*"
