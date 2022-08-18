@@ -21,17 +21,13 @@ def parse_file(path_to_file):
     return columns, rows
 
 
-# 0xbc67d98834f0825fd33e4829eacf8357101fd2e0
-# 0x16A765B12F9f364aed12F836dA9ae42DB10B2d88
-
-# b35825d96a211f9356ac29bf56cabd2432a2741441adb6278bdee97870e076a8
-# efb94e54aec99e6cd750c9a1b5966b4ba6b72179639fa056bcf8958766030f17
-
-
 parser = argparse.ArgumentParser(
     prog="List creator",
     description="""You can use this small utility to add allowlist addresses
-                                 and addresses digests to database. Input *.csv file.""",
+                                 and addresses digests to database. Input *.csv file.
+                                 python -m db_utils.create_list -lf ./test_list.csv -wc winner \\
+                                    -ln allowlist -ltn allowlist -cn movebirds -k keys/key.txt \\
+                                    -d mysql+mysqlconnector://[backend_user]:kasandra1@localhost:3306/nft""",
 )
 parser.add_argument(
     "-db",
@@ -91,7 +87,7 @@ parser.add_argument(
     required=True,
     default=False,
     action="store",
-    dest="pem_key_path",
+    dest="txt_key_path",
 )
 args = parser.parse_args()
 
@@ -129,7 +125,7 @@ if not db_access_list:
             name=args.list_name,
             collection_id=db_collection.id,
             list_type_id=db_access_list_type.id,
-            signing_pk=keypair.get_public_key(),
+            signing_pk=keypair.get_address(),
         ),
     )
 print("Success!")
@@ -141,7 +137,7 @@ for row in rows:
         db_wallet = crud.get_wallet(db, address=address)
         if not db_wallet:
             db_wallet = crud.create_wallet(db, schemas.WalletCreate(address=address))
-        signed_address = keypair.sk.sign_recoverable(address.encode("utf-8")).hex()
+        signed_address = keypair.sign_address(address)
 
         db_access_list_item = crud.get_access_list_item(
             db,
@@ -159,4 +155,4 @@ for row in rows:
             )
         print(db_access_list_item)
 
-keypair.save_pem(args.pem_key_path)
+keypair.save_txt(args.txt_key_path)
