@@ -1,12 +1,11 @@
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 from .routers import access_lists
 from fastapi.middleware.cors import CORSMiddleware
+import os
 
 app = FastAPI()
 
-origins = [
-    "http://localhost:3000",
-]
+origins = ["http://localhost:3000", os.environ.get("FRONTEND_ADDRESS")]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
