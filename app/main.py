@@ -5,10 +5,9 @@ import os
 
 app = FastAPI()
 
-origins = ["http://localhost:3000", os.environ.get("FRONTEND_ADDRESS"), "http://hootis.com"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_methods=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

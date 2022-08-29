@@ -28,8 +28,6 @@ services:
       db:
         condition: service_healthy
     container_name: fast_api
-    environment:
-      - FRONTEND_ADDRESS=${FRONTEND_ADDRESS}
     build:
       context: .
       dockerfile: app/Dockerfile
