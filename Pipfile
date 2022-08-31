@@ -9,6 +9,7 @@ fastapi = "*"
 sqlalchemy = "*"
 mysql-connector-python = "*"
 alembic = "*"
+python-dotenv = "*"
 
 [dev-packages]
 black = "*"

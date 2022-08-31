@@ -20,10 +20,7 @@ services:
       start_period: 15s
       timeout: 10s
   fast_api:
-    command: >
-      sh -c "alembic upgrade heads
-            cd ../../ 
-            uvicorn app.main:app --host 0.0.0.0 --port 8888"
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8888 --proxy-headers
     depends_on:
       db:
         condition: service_healthy
