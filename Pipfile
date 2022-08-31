@@ -11,6 +11,7 @@ mysql-connector-python = "*"
 alembic = "*"
 python-dotenv = "*"
 web3 = "*"
+gunicorn = "*"
 
 [dev-packages]
 black = "*"
