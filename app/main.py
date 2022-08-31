@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from .routers import access_lists, blockchain
 
-app = FastAPI()
+app = FastAPI(root_path="/api")
 
 app.include_router(access_lists.router)
 app.include_router(blockchain.router)

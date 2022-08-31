@@ -1,7 +1,6 @@
 import os
 import time
-from fastapi import APIRouter, Depends, HTTPException
-from pydantic import ValidationError
+from fastapi import APIRouter
 import json
 from web3 import Web3
 from dotenv import load_dotenv

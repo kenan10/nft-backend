@@ -1,5 +1,4 @@
-# FROM python:3.10.6-slim-buster
-FROM tiangolo/uvicorn-gunicorn-fastapi
+FROM python:3.10.6-slim-buster
 
 COPY /app /usr/backend/app
 WORKDIR /usr/backend
