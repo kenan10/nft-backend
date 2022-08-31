@@ -44,23 +44,26 @@ async def read_list_item_from_list_if_exist(
 async def read_list_items_from_list_if_exist(
     address: str, collection_name: str, db: Session = Depends(get_db)
 ):
-    db_list_items = crud.get_access_list_items_by_collection_name_and_address(
-        db, address=address, collection_name=collection_name
+    db_list_items = crud.get_access_list_items_by_address(
+        db, address=address
     )
+    
     if db_list_items:
         try:
             data = []
             for item in db_list_items:
-                data.append(
-                    schemas.AccessListItem.parse_obj(
-                        {
-                            "wallet_address": item.wallet.address,
-                            "list_name": item.list.name,
-                            "collection_name": item.list.collection.name,
-                            "signed_address": item.signed_address,
-                        }
+                print(item.list.collection.name, collection_name)  
+                if item.list.collection.name == collection_name:
+                    data.append(
+                        schemas.AccessListItem.parse_obj(
+                            {
+                                "wallet_address": item.wallet.address,
+                                "list_name": item.list.name,
+                                "collection_name": item.list.collection.name,
+                                "signed_address": item.signed_address,
+                            }
+                        )
                     )
-                )
             list_items = schemas.AccessListItems.parse_obj(data)
             return list_items
         except ValidationError as e:
