@@ -28,7 +28,6 @@ class setInterval:
 
 
 router = APIRouter(prefix="/blockchain", tags=["blockchain"])
-number_minted = 0
 
 @router.on_event("startup")
 async def startup_event():
@@ -40,6 +39,7 @@ async def startup_event():
     contract = web3.eth.contract(address=contract_address, abi=abi)
 
     def update_number_minted():
+        global number_minted
         number_minted = contract.functions.totalSupply().call()
 
     setInterval(2, update_number_minted)
@@ -47,5 +47,9 @@ async def startup_event():
 
 @router.get("/number_minted")
 def get_number_minted():
-    resp = {"value_name": "number_minted", "value": number_minted}
+    try:
+        resp = {"value_name": "number_minted", "value": number_minted}
+    except BaseException:
+        print("Get number minted")
+        
     return resp
