@@ -28,7 +28,7 @@ class setInterval:
 
 
 router = APIRouter(prefix="/blockchain", tags=["blockchain"])
-
+number_minted = 0
 
 @router.on_event("startup")
 async def startup_event():
@@ -40,7 +40,6 @@ async def startup_event():
     contract = web3.eth.contract(address=contract_address, abi=abi)
 
     def update_number_minted():
-        global number_minted
         number_minted = contract.functions.totalSupply().call()
 
     setInterval(2, update_number_minted)
