@@ -5,6 +5,7 @@ WORKDIR /usr/backend
 COPY requirements.txt .
 COPY abi.json .
 COPY .env .
+COPY gunicorn.conf.py .
 RUN apt-get update && \
     apt-get -y install gcc mono-mcs && \
     rm -rf /var/lib/apt/lists/*
