@@ -19,6 +19,10 @@ services:
       retries: 30
       start_period: 15s
       timeout: 10s
+    ulimits:
+      nofile:
+        soft: 2100
+        hard: 4000
   fast_api:
     command: >
       sh -c "alembic upgrade heads
