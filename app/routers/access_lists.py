@@ -52,7 +52,6 @@ async def read_list_items_from_list_if_exist(
         try:
             data = []
             for item in db_list_items:
-                print(item.list.collection.name, collection_name)  
                 if item.list.collection.name == collection_name:
                     data.append(
                         schemas.AccessListItem.parse_obj(

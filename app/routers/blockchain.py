@@ -31,7 +31,7 @@ router = APIRouter(prefix="/blockchain", tags=["blockchain"])
 
 @router.on_event("startup")
 async def startup_event():
-    web3 = Web3(Web3.HTTPProvider(os.getenv("GOERLI_RPC")))
+    web3 = Web3(Web3.HTTPProvider(os.getenv("MAINNET_RPC")))
     contract_address = os.getenv("CONTRACT_ADDRESS")
     with open("./abi.json") as abi_file:
         abi = json.load(abi_file)
@@ -42,7 +42,7 @@ async def startup_event():
         global number_minted
         number_minted = contract.functions.totalSupply().call()
 
-    setInterval(2, update_number_minted)
+    setInterval(os.getenv("NUMBER_MINTED_UPDATE_INTERVAL"), update_number_minted)
 
 
 @router.get("/number_minted")
@@ -50,6 +50,6 @@ def get_number_minted():
     try:
         resp = {"value_name": "number_minted", "value": number_minted}
     except BaseException:
-        print("Get number minted")
+        pass
         
     return resp
