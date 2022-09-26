@@ -1,6 +1,6 @@
 services:
   db:
-    container_name: mysql_db
+    container_name: mysql_db_backend
     build:
       context: .
       dockerfile: database/Dockerfile
@@ -27,7 +27,7 @@ services:
     command: >
       sh -c "alembic upgrade heads
             cd ../../ 
-            gunicorn app.main:app --bind 0.0.0.0:8888 --worker-class uvicorn.workers.UvicornWorker --workers 3 --config ./gunicorn.conf.py"
+            gunicorn app.main:app --bind 0.0.0.0:8888 --preload --worker-class uvicorn.workers.UvicornWorker --workers 3"
     depends_on:
       db:
         condition: service_healthy

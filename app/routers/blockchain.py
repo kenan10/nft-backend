@@ -42,7 +42,7 @@ async def startup_event():
         global number_minted
         number_minted = contract.functions.totalSupply().call()
 
-    setInterval(os.getenv("NUMBER_MINTED_UPDATE_INTERVAL"), update_number_minted)
+    setInterval(float(os.getenv("NUMBER_MINTED_UPDATE_INTERVAL")), update_number_minted)
 
 
 @router.get("/number_minted")
