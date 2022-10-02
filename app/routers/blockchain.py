@@ -39,15 +39,11 @@ async def startup_event():
 
     contract = web3.eth.contract(address=contract_address, abi=abi)
 
-    global number_minted
+    def update_number_minted():
+        global number_minted
+        number_minted = contract.functions.totalSupply().call()
 
-    def update_number_minted(var):
-        var = contract.functions.totalSupply().call()
-
-    setInterval(
-        float(os.getenv("NUMBER_MINTED_UPDATE_INTERVAL")),
-        lambda: update_number_minted(number_minted),
-    )
+    setInterval(float(os.getenv("NUMBER_MINTED_UPDATE_INTERVAL")), update_number_minted)
 
 
 @router.get("/number_minted")
