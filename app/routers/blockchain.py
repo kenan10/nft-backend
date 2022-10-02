@@ -8,7 +8,6 @@ import threading
 
 load_dotenv()
 
-number_minted = 0
 
 class setInterval:
     def __init__(self, interval, action):
@@ -30,6 +29,7 @@ class setInterval:
 
 router = APIRouter(prefix="/blockchain", tags=["blockchain"])
 
+
 @router.on_event("startup")
 async def startup_event():
     web3 = Web3(Web3.HTTPProvider(os.getenv("RPC_URL")))
@@ -39,10 +39,15 @@ async def startup_event():
 
     contract = web3.eth.contract(address=contract_address, abi=abi)
 
-    def update_number_minted():
-        number_minted = contract.functions.totalSupply().call()
+    global number_minted
 
-    setInterval(float(os.getenv("NUMBER_MINTED_UPDATE_INTERVAL")), update_number_minted)
+    def update_number_minted(var):
+        var = contract.functions.totalSupply().call()
+
+    setInterval(
+        float(os.getenv("NUMBER_MINTED_UPDATE_INTERVAL")),
+        lambda: update_number_minted(number_minted),
+    )
 
 
 @router.get("/number_minted")
@@ -51,5 +56,5 @@ def get_number_minted():
         resp = {"value_name": "number_minted", "value": number_minted}
     except BaseException:
         pass
-        
+
     return resp
