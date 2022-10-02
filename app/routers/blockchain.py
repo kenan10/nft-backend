@@ -8,6 +8,7 @@ import threading
 
 load_dotenv()
 
+number_minted = 0
 
 class setInterval:
     def __init__(self, interval, action):
@@ -37,7 +38,6 @@ async def startup_event():
         abi = json.load(abi_file)
 
     contract = web3.eth.contract(address=contract_address, abi=abi)
-    global number_minted
 
     def update_number_minted():
         number_minted = contract.functions.totalSupply().call()
