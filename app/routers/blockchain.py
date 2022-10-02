@@ -37,9 +37,9 @@ async def startup_event():
         abi = json.load(abi_file)
 
     contract = web3.eth.contract(address=contract_address, abi=abi)
+    global number_minted
 
     def update_number_minted():
-        global number_minted
         number_minted = contract.functions.totalSupply().call()
 
     setInterval(float(os.getenv("NUMBER_MINTED_UPDATE_INTERVAL")), update_number_minted)
