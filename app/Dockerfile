@@ -9,7 +9,6 @@ WORKDIR /usr/backend
 COPY requirements.txt .
 COPY abi.json .
 COPY .env .
-COPY gunicorn.conf.py .
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 WORKDIR /usr/backend/app/db
