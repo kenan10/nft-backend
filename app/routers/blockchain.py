@@ -32,7 +32,7 @@ router = APIRouter(prefix="/blockchain", tags=["blockchain"])
 
 @router.on_event("startup")
 async def startup_event():
-    web3 = Web3(Web3.HTTPProvider(os.getenv("RPC_URL", request_kwargs={"timeout": 60})))
+    web3 = Web3(Web3.HTTPProvider(os.getenv("RPC_URL", request_kwargs={"timeout": 30})))
     contract_address = os.getenv("CONTRACT_ADDRESS")
     with open("./abi.json") as abi_file:
         abi = json.load(abi_file)
